@@ -1,0 +1,25 @@
+version: "3.8"
+volumes:
+  data:
+services:
+  app:
+    build: .
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/watermelon
+      SPRING_DATASOURCE_USERNAME: userjane
+      SPRING_DATASOURCE_PASSWORD: userjane
+    depends_on:
+      - postgres
+  postgres:
+    image: "postgres:14.1-alpine"
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: "userjane"
+      POSTGRES_PASSWORD: "userjane"
+      POSTGRES_DB: "watermelon"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - data:/var/lib/postgresql/data
